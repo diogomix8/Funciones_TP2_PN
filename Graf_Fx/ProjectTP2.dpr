@@ -2,7 +2,8 @@ program ProjectTP2;
 
 uses
   Forms,
-  FuncionesTP2 in 'FuncionesTP2.pas' {FormMainFunciones};
+  FuncionesTP2 in 'FuncionesTP2.pas' {FormMainFunciones},
+  UCalRaiz in 'UCalRaiz.pas';
 
 {$R *.res}
 

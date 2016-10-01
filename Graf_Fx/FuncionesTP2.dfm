@@ -1,8 +1,8 @@
 object FormMainFunciones: TFormMainFunciones
-  Left = 636
-  Top = 116
+  Left = 1032
+  Top = 135
   Width = 809
-  Height = 788
+  Height = 836
   Caption = 'Funciones TP2'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object FormMainFunciones: TFormMainFunciones
     Left = 0
     Top = 0
     Width = 793
-    Height = 729
+    Height = 777
     BevelInner = bvRaised
     BorderStyle = bsSingle
     TabOrder = 0
@@ -106,16 +106,16 @@ object FormMainFunciones: TFormMainFunciones
       Height = 21
       TabOrder = 0
     end
-    object ButtonGraficar: TButton
+    object ButtonGraficarBis: TButton
       Left = 576
       Top = 24
       Width = 75
       Height = 25
       Caption = 'Graficar'
       TabOrder = 1
-      OnClick = ButtonGraficarClick
+      OnClick = ButtonGraficarBisClick
     end
-    object ButtonZoomIn: TButton
+    object ButtonZoomInBis: TButton
       Left = 568
       Top = 336
       Width = 75
@@ -128,16 +128,16 @@ object FormMainFunciones: TFormMainFunciones
       Font.Style = []
       ParentFont = False
       TabOrder = 2
-      OnClick = ButtonZoomInClick
+      OnClick = ButtonZoomInBisClick
     end
-    object ButtonCancelarBiseccion: TButton
+    object ButtonCancelarBis: TButton
       Left = 576
       Top = 64
       Width = 75
       Height = 25
       Caption = 'Cancelar'
       TabOrder = 3
-      OnClick = ButtonCancelarBiseccionClick
+      OnClick = ButtonCancelarBisClick
     end
     object EditMaxX: TEdit
       Left = 616
@@ -167,16 +167,16 @@ object FormMainFunciones: TFormMainFunciones
       Height = 21
       TabOrder = 7
     end
-    object ButtonActualizarGraficador: TButton
+    object ButtonActualizarGraficadorBis: TButton
       Left = 600
       Top = 280
       Width = 113
       Height = 25
       Caption = 'Actualizar Datos'
       TabOrder = 8
-      OnClick = ButtonActualizarGraficadorClick
+      OnClick = ButtonActualizarGraficadorBisClick
     end
-    object ButtonZoomOut: TButton
+    object ButtonZoomOutBis: TButton
       Left = 568
       Top = 376
       Width = 75
@@ -189,7 +189,7 @@ object FormMainFunciones: TFormMainFunciones
       Font.Style = []
       ParentFont = False
       TabOrder = 9
-      OnClick = ButtonZoomOutClick
+      OnClick = ButtonZoomOutBisClick
     end
     object PanelDatosRaiz: TPanel
       Left = 32
@@ -217,9 +217,9 @@ object FormMainFunciones: TFormMainFunciones
       object LabelIntervalo: TLabel
         Left = 8
         Top = 40
-        Width = 139
+        Width = 156
         Height = 13
-        Caption = 'Ingrese el Intervalo (a,b) =  '
+        Caption = 'Ingrese el Intervalo (inf,sup) =  '
       end
       object LabelError: TLabel
         Left = 8
@@ -228,30 +228,44 @@ object FormMainFunciones: TFormMainFunciones
         Height = 13
         Caption = 'Ingrese el Error = '
       end
-      object EditIntervalo: TEdit
-        Left = 144
-        Top = 32
-        Width = 121
+      object LabelInfBiseccion: TLabel
+        Left = 168
+        Top = 40
+        Width = 14
+        Height = 13
+        Caption = 'Inf'
+      end
+      object LabelSupBiseccion: TLabel
+        Left = 248
+        Top = 40
+        Width = 18
+        Height = 13
+        Caption = 'Sup'
+      end
+      object EditInfBiseccion: TEdit
+        Left = 193
+        Top = 35
+        Width = 41
         Height = 21
         TabOrder = 0
       end
       object EditError: TEdit
         Left = 104
-        Top = 64
+        Top = 67
         Width = 121
         Height = 21
         TabOrder = 1
       end
-      object Button1: TButton
+      object ButtonCalRaizBis: TButton
         Left = 392
         Top = 24
         Width = 89
         Height = 25
         Caption = 'Calcular Raiz'
         TabOrder = 2
-        OnClick = Button1Click
+        OnClick = ButtonCalRaizBisClick
       end
-      object ButtonLimpiar: TButton
+      object ButtonLimpiarBis: TButton
         Left = 392
         Top = 56
         Width = 89
@@ -259,12 +273,19 @@ object FormMainFunciones: TFormMainFunciones
         Caption = 'Limpiar'
         TabOrder = 3
       end
+      object EditSupBiseccion: TEdit
+        Left = 272
+        Top = 35
+        Width = 41
+        Height = 21
+        TabOrder = 4
+      end
     end
     object PanelMuestraResult: TPanel
       Left = 32
       Top = 592
       Width = 521
-      Height = 121
+      Height = 169
       BorderStyle = bsSingle
       TabOrder = 11
       object LabelMuestraResult: TLabel
@@ -298,16 +319,59 @@ object FormMainFunciones: TFormMainFunciones
       end
       object LabelDerivada: TLabel
         Left = 8
-        Top = 96
+        Top = 120
         Width = 38
         Height = 13
         Caption = 'f'#180'(x) = '
       end
       object LabelShowDerivada: TLabel
-        Left = 56
+        Left = 51
+        Top = 120
+        Width = 3
+        Height = 13
+      end
+      object LabelCantIter: TLabel
+        Left = 8
+        Top = 96
+        Width = 129
+        Height = 13
+        Caption = 'Cantidad de Iteraciones = '
+      end
+      object LabelShowCantIter: TLabel
+        Left = 144
         Top = 96
         Width = 3
         Height = 13
+      end
+      object LabelFuncEval: TLabel
+        Left = 8
+        Top = 144
+        Width = 109
+        Height = 13
+        Caption = 'Evaludo en el Punto = '
+      end
+      object LabelShowPtoEval: TLabel
+        Left = 120
+        Top = 144
+        Width = 28
+        Height = 13
+        Caption = 'Punto'
+      end
+      object ButtonEvaluarPto: TButton
+        Left = 408
+        Top = 128
+        Width = 75
+        Height = 25
+        Caption = 'Evaluar'
+        TabOrder = 0
+        OnClick = ButtonEvaluarPtoClick
+      end
+      object EditFuncEval: TEdit
+        Left = 280
+        Top = 128
+        Width = 121
+        Height = 21
+        TabOrder = 1
       end
     end
   end

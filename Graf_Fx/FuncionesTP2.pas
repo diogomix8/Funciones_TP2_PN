@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, Menus, GrafFuncion, uFuncion, DiffExpress;
+  Dialogs, StdCtrls, ExtCtrls, Menus, GrafFuncion, uFuncion, DiffExpress, UCalRaiz;
 
 type
   TFormMainFunciones = class(TForm)
@@ -16,10 +16,10 @@ type
     LabelFuncion: TLabel;
     EditFuncion: TEdit;
     Graficador1: TGraficador;
-    ButtonGraficar: TButton;
-    ButtonZoomIn: TButton;
+    ButtonGraficarBis: TButton;
+    ButtonZoomInBis: TButton;
     LabelTitle: TLabel;
-    ButtonCancelarBiseccion: TButton;
+    ButtonCancelarBis: TButton;
     LabelActGraficador: TLabel;
     LabeMaxX: TLabel;
     LabelMaxY: TLabel;
@@ -29,16 +29,16 @@ type
     EditMaxY: TEdit;
     EditMinX: TEdit;
     EditMinY: TEdit;
-    ButtonActualizarGraficador: TButton;
-    ButtonZoomOut: TButton;
+    ButtonActualizarGraficadorBis: TButton;
+    ButtonZoomOutBis: TButton;
     LabelTitleRaiz: TLabel;
     LabelIntervalo: TLabel;
     LabelError: TLabel;
-    EditIntervalo: TEdit;
+    EditInfBiseccion: TEdit;
     EditError: TEdit;
     PanelDatosRaiz: TPanel;
-    Button1: TButton;
-    ButtonLimpiar: TButton;
+    ButtonCalRaizBis: TButton;
+    ButtonLimpiarBis: TButton;
     PanelMuestraResult: TPanel;
     LabelMuestraResult: TLabel;
     LabelShowIntervalo: TLabel;
@@ -46,14 +46,24 @@ type
     MenuItemSalir: TMenuItem;
     LabelDerivada: TLabel;
     LabelShowDerivada: TLabel;
+    LabelCantIter: TLabel;
+    LabelShowCantIter: TLabel;
+    LabelFuncEval: TLabel;
+    ButtonEvaluarPto: TButton;
+    EditFuncEval: TEdit;
+    LabelShowPtoEval: TLabel;
+    LabelInfBiseccion: TLabel;
+    LabelSupBiseccion: TLabel;
+    EditSupBiseccion: TEdit;
     procedure MenuItemBiseccionClick(Sender: TObject);
-    procedure ButtonGraficarClick(Sender: TObject);
-    procedure ButtonZoomInClick(Sender: TObject);
-    procedure ButtonActualizarGraficadorClick(Sender: TObject);
-    procedure ButtonCancelarBiseccionClick(Sender: TObject);
-    procedure ButtonZoomOutClick(Sender: TObject);
+    procedure ButtonGraficarBisClick(Sender: TObject);
+    procedure ButtonZoomInBisClick(Sender: TObject);
+    procedure ButtonActualizarGraficadorBisClick(Sender: TObject);
+    procedure ButtonCancelarBisClick(Sender: TObject);
+    procedure ButtonZoomOutBisClick(Sender: TObject);
     procedure MenuItemSalirClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure ButtonCalRaizBisClick(Sender: TObject);
+    procedure ButtonEvaluarPtoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -62,7 +72,11 @@ type
 
 var
   FormMainFunciones: TFormMainFunciones;
-
+  FuncionRaiz:TCalRaiz;
+  Funcion:TFuncion;
+  sIntervalo,sError: string;
+  a,b:extended;
+  e:integer;
 implementation
 
 {$R *.dfm}
@@ -73,34 +87,35 @@ begin
      PanelMetBiseccion.Visible:=true;
      PanelDatosRaiz.Visible:=true;
      PanelMuestraResult.Visible:=true;
-
 end;
 
 {======================= BOTON "GRAFICAR" =======================}
-procedure TFormMainFunciones.ButtonGraficarClick(Sender: TObject);
+procedure TFormMainFunciones.ButtonGraficarBisClick(Sender: TObject);
 var
    sFuncion:string;
 begin
      sFuncion:=EditFuncion.Text;
      Graficador1.formula:=sFuncion;
+     Funcion:=TFuncion.Crear;
+     Funcion.Formula:=Graficador1.formula;
 end;
 {======================= BOTON "GRAFICAR" =======================}
 
 { ====================== BOTON "ZOOM (+)" ===========================}
-procedure TFormMainFunciones.ButtonZoomInClick(Sender: TObject);
+procedure TFormMainFunciones.ButtonZoomInBisClick(Sender: TObject);
 begin
      Graficador1.zoomOut;
 end;
 { ====================== BOTON "ZOOM (+)" ===========================}
 
 { ====================== BOTON "ZOOM (-)" ===========================}
-procedure TFormMainFunciones.ButtonZoomOutClick(Sender: TObject);
+procedure TFormMainFunciones.ButtonZoomOutBisClick(Sender: TObject);
 begin
      Graficador1.zoomIn;
 end;
 { ====================== BOTON "ZOOM (-)" ===========================}
 
-procedure TFormMainFunciones.ButtonActualizarGraficadorClick(Sender: TObject);
+procedure TFormMainFunciones.ButtonActualizarGraficadorBisClick(Sender: TObject);
 var
    sMaxX, sMaxy, sMinX, sMinY: string;
    dMaxX, dMaxy, dMinX, dMinY: double;
@@ -120,25 +135,59 @@ begin
      Graficador1.minY:=dMinY;
 end;
 
-procedure TFormMainFunciones.ButtonCancelarBiseccionClick(Sender: TObject);
+procedure TFormMainFunciones.ButtonCancelarBisClick(Sender: TObject);
 begin
      { Al cancelar solo cerramos el panel haciendolo no visible }
      PanelMetBiseccion.Visible:=false;
      PanelDatosRaiz.Visible:=false;
      PanelMuestraResult.Visible:=false;
+     { Liberamos la Memoria }
+     Graficador1.Destroy;
+     FuncionRaiz.Destroy;
+     Funcion.Destroy;
 end;
 
 { Al salir de programa principal, destruimos todos los objetos del graficador y cerramos. }
 procedure TFormMainFunciones.MenuItemSalirClick(Sender: TObject);
 begin
      Graficador1.Destroy;
+     FuncionRaiz.Destroy;
+     Funcion.Destroy;
      FormMainFunciones.Close;
 end;
 
-procedure TFormMainFunciones.Button1Click(Sender: TObject);
+procedure TFormMainFunciones.ButtonCalRaizBisClick(Sender: TObject);
+var
+   eRaiz:extended;
+   bIter:byte;
+   sIter:string;
 begin
+     FuncionRaiz := TCalRaiz.Create;
+     { Asignamos los valores de los intervalos }
+     a := StrToFloat(EditInfBiseccion.Text);
+     b := StrToFloat(EditSupBiseccion.Text);
+     { Asignamos el valor del error }
+     { Calculamos la Raiz de la Funcion creada con sus datos }
+     //eRaiz:=FuncionRaiz.biseccion(Funcion,a,b,StrToFloat(EditError.Text));
+     { Mostramos los datos en el panel de Resultados}
+     LabelShowIntervalo.Caption:='Intervalo = ('+FloatToStrF( a, ffNumber, 2, 2 )+','+FloatToStrF( b, ffNumber, 2, 2 )+')';
+     //LabelShowRaiz.Caption:=FloatToStrF( eRaiz, ffNumber, 4, 5 );
+     bIter:=FuncionRaiz.NroInteraciones;
+     Str(bIter,sIter);
+     LabelShowCantIter.Caption:=sIter;
      { Mostramos el contenido Derivada }
      LabelShowDerivada.Caption:=Graficador1.Derivada;
+end;
+
+procedure TFormMainFunciones.ButtonEvaluarPtoClick(Sender: TObject);
+var
+   ePunto, eFuncEval:extended;
+   sPunto:string;
+begin
+     sPunto:=EditFuncEval.Text;
+     Val(sPunto,ePunto,e);
+     eFuncEval:=Graficador1.f(ePunto);
+     LabelShowPtoEval.Caption:=FormatFloat('0.####', eFuncEval);
 end;
 
 end.

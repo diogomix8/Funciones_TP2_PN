@@ -17,6 +17,7 @@ Type
            Function Radical(Rcndo, Ind:Extended):Extended;
            FUNCTION POT (B,EP: Extended):Extended;
            Function GetExpresion: ShortString;
+           Procedure SetExpresion(Const Valor:ShortString);
            FUNCTION Valor_FunLIB(Var v:ShortString; Arg:Extended):Extended;
            Function Func(_Formula: ShortString; X:Extended):Extended;
            Function Validar(Var expresion:ShortString;var pos:integer):boolean;
@@ -28,7 +29,7 @@ Type
            Function  Valor(Var Ex : ShortString): Extended;
            Procedure Setup(strg: ShortString);
 
-           Property Formula: ShortString read GetExpresion;
+           Property Formula: ShortString read GetExpresion write SetExpresion;
     End;
 
 IMPLEMENTATION
@@ -765,6 +766,11 @@ End;
 Function TFuncion.GetExpresion: ShortString;
 Begin
    GetExpresion:= Fnc;
+End;
+
+Procedure TFuncion.SetExpresion(Const Valor:ShortString);
+Begin
+     Fnc := Valor;
 End;
 
 END.
