@@ -1,6 +1,6 @@
 object FormMainFunciones: TFormMainFunciones
-  Left = 1032
-  Top = 135
+  Left = 1002
+  Top = 127
   Width = 809
   Height = 836
   Caption = 'Funciones TP2'
@@ -384,6 +384,10 @@ object FormMainFunciones: TFormMainFunciones
         Caption = 'M'#233'todo de Bisecci'#243'n'
         ShortCut = 16449
         OnClick = MenuItemBiseccionClick
+      end
+      object MenuItemRFMod: TMenuItem
+        Caption = 'M'#233'todo Regula Falsi Modificada'
+        ShortCut = 16450
       end
       object MenuItemSalir: TMenuItem
         Caption = 'Salir'

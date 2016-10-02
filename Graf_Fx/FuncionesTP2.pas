@@ -55,6 +55,7 @@ type
     LabelInfBiseccion: TLabel;
     LabelSupBiseccion: TLabel;
     EditSupBiseccion: TEdit;
+    MenuItemRFMod: TMenuItem;
     procedure MenuItemBiseccionClick(Sender: TObject);
     procedure ButtonGraficarBisClick(Sender: TObject);
     procedure ButtonZoomInBisClick(Sender: TObject);
@@ -73,10 +74,7 @@ type
 var
   FormMainFunciones: TFormMainFunciones;
   FuncionRaiz:TCalRaiz;
-  Funcion:TFuncion;
-  sIntervalo,sError: string;
-  a,b:extended;
-  e:integer;
+  sIntervalo: string;
 implementation
 
 {$R *.dfm}
@@ -90,14 +88,11 @@ begin
 end;
 
 {======================= BOTON "GRAFICAR" =======================}
+{ Para visuliar la Grafica solo asignamos una Formula y seteamos  } 
 procedure TFormMainFunciones.ButtonGraficarBisClick(Sender: TObject);
-var
-   sFuncion:string;
 begin
-     sFuncion:=EditFuncion.Text;
-     Graficador1.formula:=sFuncion;
-     Funcion:=TFuncion.Crear;
-     Funcion.Formula:=Graficador1.formula;
+     { Asignamos la Formula de la Funcion a la Propiedad del Objeto  }
+     Graficador1.formula:=EditFuncion.Text;
 end;
 {======================= BOTON "GRAFICAR" =======================}
 
@@ -144,15 +139,15 @@ begin
      { Liberamos la Memoria }
      Graficador1.Destroy;
      FuncionRaiz.Destroy;
-     Funcion.Destroy;
 end;
 
 { Al salir de programa principal, destruimos todos los objetos del graficador y cerramos. }
 procedure TFormMainFunciones.MenuItemSalirClick(Sender: TObject);
 begin
+     { Liberamos la Memoria}
      Graficador1.Destroy;
+     FuncionRaiz.Free;
      FuncionRaiz.Destroy;
-     Funcion.Destroy;
      FormMainFunciones.Close;
 end;
 
@@ -162,19 +157,22 @@ var
    bIter:byte;
    sIter:string;
 begin
+     { Instaciamos un Objeto de la Clase TCalRaiz }
      FuncionRaiz := TCalRaiz.Create;
      { Asignamos los valores de los intervalos }
-     a := StrToFloat(EditInfBiseccion.Text);
-     b := StrToFloat(EditSupBiseccion.Text);
-     { Asignamos el valor del error }
+     FuncionRaiz.Infimo := StrToFloat(EditInfBiseccion.Text);
+     FuncionRaiz.Supremo := StrToFloat(EditSupBiseccion.Text);
+     ShowMessage('a ='+FloatToStr(FuncionRaiz.Infimo));
+     ShowMessage('b ='+FloatToStr(FuncionRaiz.Supremo));
+     { Asignamos el valor del error  }
+     FuncionRaiz.ErrorRaiz := StrToFloat(EditError.Text);
      { Calculamos la Raiz de la Funcion creada con sus datos }
-     //eRaiz:=FuncionRaiz.biseccion(Funcion,a,b,StrToFloat(EditError.Text));
+     { Graficado1 contiene la Formula de la Función Ingresada }
+     FuncionRaiz.biseccion(Graficador1);
      { Mostramos los datos en el panel de Resultados}
-     LabelShowIntervalo.Caption:='Intervalo = ('+FloatToStrF( a, ffNumber, 2, 2 )+','+FloatToStrF( b, ffNumber, 2, 2 )+')';
-     //LabelShowRaiz.Caption:=FloatToStrF( eRaiz, ffNumber, 4, 5 );
-     bIter:=FuncionRaiz.NroInteraciones;
-     Str(bIter,sIter);
-     LabelShowCantIter.Caption:=sIter;
+     LabelShowIntervalo.Caption:='Intervalo = ('+FloatToStrF( FuncionRaiz.Infimo, ffNumber, 2, 0 )+','+FloatToStrF( FuncionRaiz.Supremo, ffNumber, 2, 0 )+')';
+     LabelShowRaiz.Caption:='Raiz Aproximada = '+FloatToStrF( FuncionRaiz.RaizAproxmida, ffNumber, 4, 7 );
+     LabelShowCantIter.Caption:=IntToStr(FuncionRaiz.NroInteraciones);
      { Mostramos el contenido Derivada }
      LabelShowDerivada.Caption:=Graficador1.Derivada;
 end;
@@ -183,6 +181,7 @@ procedure TFormMainFunciones.ButtonEvaluarPtoClick(Sender: TObject);
 var
    ePunto, eFuncEval:extended;
    sPunto:string;
+   e:integer;
 begin
      sPunto:=EditFuncEval.Text;
      Val(sPunto,ePunto,e);

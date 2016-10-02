@@ -4,32 +4,46 @@ interface
 
 uses
     Windows, Messages, SysUtils, Classes, Graphics,
-    Controls, Forms, Dialogs, uFuncion, GrafFuncion;
+    Controls, Forms, Dialogs, GrafFuncion;
 
 type
     TCalRaiz = class
     private
          { Atributos }
-         nroIter : byte;
-         sIntervalo: String;
+         nroIter : byte;     // Numero de Iteraciones
+         IInf : extended;    // Valor Infimo
+         ISup : extended;    // Valor Supremo
+         raiz : extended;    // Raiz Aproximada
+         error : extended;    // Error(epsilon)
+         sIntervalo: String; // Intervalo como String
          
          { Métodos Privados }
          procedure setIntervalo(Const Valor: String);
          procedure setNroIteraciones(Const Valor: byte);
+         procedure setIInf(Const Valor:extended);
+         procedure setISup(Const Valor:extended);
+         procedure setRaiz(Const Valor:extended);
+         procedure setError(Const Valor:extended);
     public
          { Constructores }
          constructor Create;
          { Métodos Publicos }
-         function biseccion(Func:TFuncion; a,b,e:extended):extended;
+         procedure biseccion(F:TGraficador);
 
          Property Intervalo: String read sIntervalo write setIntervalo;
          Property NroInteraciones: byte read nroIter write setNroIteraciones;
+         Property Infimo: Extended read IInf write setIInf;
+         Property Supremo: Extended read ISup write setISup;
+         Property RaizAproxmida: Extended read raiz write setRaiz;
+         Property ErrorRaiz: Extended read error write setError;
     end;
 
 implementation
 
+{ Constructor de la Clase}
 constructor TCalRaiz.Create;
 begin
+     //F := TFuncion.Crear;
      nroIter := 0;
      sIntervalo := '';
      inherited Create;
@@ -47,32 +61,52 @@ begin
      nroIter:=Valor;
 end;
 
-function TCalRaiz.biseccion(Func:TFuncion;a,b,e:extended):extended;
-       //obj:parametro de tipo TFuncion donde pasamos la funcion a determinar una posible raiz por el Metodo de la Biseccion
-       // (a,b) :Valor del intervalo donde se analizara la posible raiz de la funcion ,ingresados por teclado por el usuario
-       // e : valor del epsilon o error que se considera de referencia para la aprox. de la raiz de la funcion
+{ Cambia el valor del atributo "IInf" por el que tiene "Valor" }
+procedure TCalRaiz.setIInf(Const Valor:extended);
+begin
+     IInf:=Valor;
+end;
+
+{ Cambia el valor del Atributo "ISup" por el que tiene "Valor"}
+procedure TCalRaiz.setISup(Const Valor:extended);
+begin
+     ISup:=Valor;
+end;
+
+{ Cambia el valor del Atributo "raiz" por el que tiene "Valor"}
+procedure TCalRaiz.setRaiz(Const Valor:extended);
+begin
+     raiz:=Valor;
+end;
+
+{ Cambia el valor del Atributo "error" por el que tiene "Valor"}
+procedure TCalRaiz.setError(Const Valor:extended);
+begin
+     error:=Valor;
+end;
+
+procedure TCalRaiz.biseccion(F:TGraficador);
+       {F :parametro de tipo TFuncion donde pasamos la funcion a determinar una posible raiz por el Metodo de la Biseccion}
        var
           c:extended;   //variable que almacenara el valor del Xi=(a+b)/2
           i:integer;  // variable que alamacenara la cantidad de iteraciones para encontrar la raiz aprox.
        begin
             i:=0;
-            // writeln('F(A): ',obj.F(a));
-              //writeln('F(A): ',obj.F(b));
-            if ((Func.f(a))* Func.f(b)) < 0) then //Verifica una d las cond del teorema de Bolzano f(a)*f(b)<0,para asegurar que f(x) tiene al menos una raiz en el intervalo
+            if ((F.f(Infimo)*F.f(Supremo)) < 0 ) then //Verifica una d las cond del teorema de Bolzano f(a)*f(b)<0,para asegurar que f(x) tiene al menos una raiz en el intervalo
             begin
-                c:=(a+b)/2;// Xi=a+b/2
-                while (abs(Func.f(c))>e) do //Mientras F(c)=F(Xi)>e(criterio de parada)
+                c:=(Infimo+Supremo)/2;// Xi=a+b/2
+                while (abs(F.f(c)) > ErrorRaiz ) do //Mientras F(c)=F(Xi)>e(criterio de parada)
                   begin
                        //Determino mi nuevo intervalo
-                      if  (Func.f(a)* Func.f(c) < 0) then
-                           b:=c
+                      if  ((F.f(Infimo)* F.f(c)) < 0) then
+                           Supremo:=c
                       else
-                           a:=c;
-                      c:=(a+b)/2;
+                           Infimo:=c;
+                      c:=(Infimo+Supremo)/2;
                       i:=i+1;
                   end;
-                nroIter:=i;
-                result:= c;  //cero de la funcion aproximado
+                NroInteraciones:=i; // Actualizamos el Nro de Iteraciones
+                RaizAproxmida:= c;  // Asignamos el cero de la funcion aproximado
             end
             else
                 ShowMessage('Error al calcular la Raiz');
