@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, Menus, GrafFuncion, uFuncion, DiffExpress, UCalRaiz;
+  Dialogs, StdCtrls, ExtCtrls, Menus, GrafFuncion, uFuncion, DiffExpress, UCalRaiz, FormAbout;
 
 type
   TFormMainFunciones = class(TForm)
@@ -254,6 +254,7 @@ type
     procedure EditFuncionNewtonKeyPress(Sender: TObject; var Key: Char);
     procedure EditFuncionBisKeyPress(Sender: TObject; var Key: Char);
     procedure EditFuncionRegFalsiKeyPress(Sender: TObject; var Key: Char);
+    procedure MenuItemAboutClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -275,6 +276,7 @@ begin
      FormMainFunciones.ButtonCancelarSecClick(Sender);
      FormMainFunciones.ButtonCancelarNewtonClick(Sender);
      FormMainFunciones.ButtonCancelarRegFalsiModClick(Sender);
+     FormMainFunciones.ButtonCancelarRegFalsiClick(Sender);
      PanelMetBiseccion.Visible:=true;
      PanelDatosRaizBiseccion.Visible:=true;
      PanelMuestraResultBiseccion.Visible:=true;
@@ -364,6 +366,7 @@ begin
      FormMainFunciones.ButtonCancelarBisClick(Sender);
      FormMainFunciones.ButtonCancelarNewtonClick(Sender);
      FormMainFunciones.ButtonCancelarRegFalsiModClick(Sender);
+     FormMainFunciones.ButtonCancelarRegFalsiClick(Sender);
      PanelMetSecante.Visible:=true;
      PanelCalRaizSecante.Visible:=true;
      PanelResultSecante.Visible:=true;
@@ -458,6 +461,7 @@ begin
   FormMainFunciones.ButtonCancelarBisClick(Sender);
   FormMainFunciones.ButtonCancelarSecClick(Sender);
   FormMainFunciones.ButtonCancelarRegFalsiModClick(Sender);
+  FormMainFunciones.ButtonCancelarRegFalsiClick(Sender);
   PanelMetNewton.Visible:=true;
   PanelDatosRaizNewton.Visible:=true;
   PanelMuestraResultNewton.Visible:=true;
@@ -488,7 +492,7 @@ end;
 { ====================== BOTON "CALCULAR RAIZ" ===========================}
 procedure TFormMainFunciones.ButtonCalRaizNewtonClick(Sender: TObject);
 begin
-  Funcion3.Destroy;
+  Funcion3.Free;
   { Instaciamos un Objeto de la Clase TCalRaiz }
   Funcion3 := TCalRaiz.Create;
   { Asignamos el valor del error  }
@@ -556,6 +560,7 @@ begin
   FormMainFunciones.ButtonCancelarBisClick(Sender);
   FormMainFunciones.ButtonCancelarSecClick(Sender);
   FormMainFunciones.ButtonCancelarNewtonClick(Sender);
+  FormMainFunciones.ButtonCancelarRegFalsiClick(Sender);
   PanelMetRegFalsiMod.Visible:=true;
   PanelDatosRaizRegFalsiMod.Visible:=true;
   PanelMuestraResultRegFalsiMod.Visible:=true;
@@ -597,12 +602,12 @@ begin
   { GraficadorSecante contiene la Formula de la Función Ingresada }
   Funcion4.regulaFalsiModificada(GraficadorRegFalsiMod);
   { Mostramos los datos en el panel de Resultados}
-  LabelIntervaloSecante.Caption:='Intervalo = ( '+FloatToStrF( Funcion4.Infimo, ffNumber, 2, 2 )+','+FloatToStrF( Funcion4.Supremo, ffNumber, 2, 2 )+')';
+  LabelShowIntervaloRegFalsiMod.Caption:='Intervalo = ( '+FloatToStrF( Funcion4.Infimo, ffNumber, 2, 2 )+','+FloatToStrF( Funcion4.Supremo, ffNumber, 2, 2 )+')';
   LabelShowErrorRegFalsiMod.Caption:='Error = '+FloatToStr( Funcion4.ErrorRaiz);
-  LabelRaizAproxSecante.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion4.RaizAproxmida, ffNumber, 4, 7 );
-  LabelShowCantIterSecante.Caption:=IntToStr(Funcion4.NroInteraciones);
+  LabelRaizAproxRegFalsiMod.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion4.RaizAproxmida, ffNumber, 4, 7 );
+  LabelShowCantIterRegFalsiMod.Caption:=IntToStr(Funcion4.NroInteraciones);
   { Mostramos el contenido Derivada }
-  LabelShowDerivadaSecante.Caption:=GraficadorSecante.Derivada;
+  LabelShowDerivadaRegFalsiMod.Caption:=GraficadorRegFalsiMod.Derivada;
 end;
 { ====================== BOTON "CALCULAR RAIZ" ===========================}
 
@@ -728,5 +733,10 @@ begin
      FormMainFunciones.Close;
 end;
 { ========================================= "MENU SALIR ============================================="}
+
+procedure TFormMainFunciones.MenuItemAboutClick(Sender: TObject);
+begin
+  FormAboutFunciones.Visible:=true;
+end;
 
 end.

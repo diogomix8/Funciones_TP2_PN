@@ -1,8 +1,8 @@
 object FormMainFunciones: TFormMainFunciones
-  Left = 989
-  Top = 112
+  Left = 514
+  Top = 0
   Width = 806
-  Height = 908
+  Height = 784
   Caption = 'Funciones TP2'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -1733,6 +1733,7 @@ object FormMainFunciones: TFormMainFunciones
       Caption = 'Ayuda'
       object MenuItemAbout: TMenuItem
         Caption = 'Sobre de'
+        OnClick = MenuItemAboutClick
       end
     end
   end

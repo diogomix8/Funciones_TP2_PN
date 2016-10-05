@@ -183,26 +183,26 @@ begin
   n:=0;
   if ( (( F.f(a) )*( (F.f(b)) )) < 0 ) then
   begin
-    G:=F.f(a);
-    H:=F.f(b);
-    w:=F.f(b);
+    H:=F.f(a);
+    G:=F.f(b);
+    w:=F.f(a);
     c:=( ( (a*G) - (b*H) ) / (G-H) );
     while ( abs(F.f(c))  > ErrorRaiz ) and ( n <= NroIteracionesMax ) do
     begin
-      if ( (F.f(a)*F.f(b)) < 0 ) then
+      if ( (F.f(a)*F.f(c)) < 0 ) then
       begin
         b:=c;
-        H:=F.f(c);
-        if ( (w*H) > 0 ) then G:=(G/2);
+        G:=F.f(c);
+        if ( (w*G) > 0 ) then H:=(H/2);
       end
       else
       begin
         a:=c;
-        G:=F.f(c);
-        if ( (w*G) > 0 ) then H:=(H/2);
+        H:=F.f(c);
+        if ( (w*H) > 0 ) then G:=(G/2);
       end;
-      //w:=F.f(c);
-      c:= ( ( (a*H) - (b*G) ) / (H-G) );
+      w:=F.f(c);
+      c:= ( ( (a*G) - (b*H) ) / (G-H) );
       inc(n);
     end;
     NroInteraciones:=n; //numero de iteraciones realizadas
@@ -223,18 +223,18 @@ begin
   b:=Supremo;
   if (((Func.f(a))* Func.f(b)) < 0) then
   begin
-    c:=( ( ( a * (Func.f(b)) ) - ( b * (Func.f(a)) ) ) ) / ( (Func.f(b)) - (Func.f(a)) );
+    c:=( ( ( b * (Func.f(a)) ) - ( a * (Func.f(b)) ) ) ) / ( (Func.f(a)) - (Func.f(b)) );
     while ( abs(Func.f(c)) > ErrorRaiz ) and ( i <= NroIteracionesMax ) do
     begin
       if ( (Func.f(a)) * (Func.f(c)) < 0) then
         b:=c
       else
         a:=c;
-      c:=( ( ( a * (Func.f(b)) ) - ( b * (Func.f(a)) ) ) ) / ( (Func.f(b)) - (Func.f(a)) );
+      c:=( ( ( b * (Func.f(a)) ) - ( a * (Func.f(b)) ) ) ) / ( (Func.f(a)) - (Func.f(b)) );
       i:=i+1;
     end;
     if( i <= NroIteracionesMax) then
-      c := RaizAproxmida
+     RaizAproxmida := c
     else
       ShowMessage('Error. Se supero la cantidad de iteraciones maxima.');
     nroIter:=i;
