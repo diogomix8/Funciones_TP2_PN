@@ -76,9 +76,6 @@ type
     LabelShowDerivadaSecante: TLabel;
     LabelCantIterSecante: TLabel;
     LabelShowCantIterSecante: TLabel;
-    LabelPtoX0Secante: TLabel;
-    EditPtoX0Secante: TEdit;
-    LabelShowPtoX0Secante: TLabel;
     GraficadorSecante: TGraficador;
     GraficadorBiseccion: TGraficador;
     LabelIntervaloSecante: TLabel;
@@ -255,6 +252,7 @@ type
     procedure EditFuncionBisKeyPress(Sender: TObject; var Key: Char);
     procedure EditFuncionRegFalsiKeyPress(Sender: TObject; var Key: Char);
     procedure MenuItemAboutClick(Sender: TObject);
+    procedure ButtonLimpiarSecanteClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -320,7 +318,7 @@ begin
      { Graficado1 contiene la Formula de la Función Ingresada }
      Funcion1.biseccion(GraficadorBiseccion);
      { Mostramos los datos en el panel de Resultados}
-     LabelIntervaloBiseccion.Caption:='Intervalo = ('+FloatToStrF( Funcion1.Infimo, ffNumber, 2, 2 )+','+FloatToStrF( Funcion1.Supremo, ffNumber, 2, 2 )+')';
+     LabelIntervaloBiseccion.Caption:='Intervalo = ('+FloatToStrF( Funcion1.Infimo, ffNumber, 2, 2 )+';'+FloatToStrF( Funcion1.Supremo, ffNumber, 2, 2 )+' )';
      LabelShowRaizBis.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion1.RaizAproxmida, ffNumber, 4, 7 );
      LabelShowCantIterBis.Caption:=IntToStr(Funcion1.NroInteraciones);
      { Mostramos el contenido Derivada }
@@ -405,14 +403,12 @@ begin
      Funcion2.Supremo := StrToFloat(EditSupSecante.Text);
      { Asignamos el valor del error  }
      Funcion2.ErrorRaiz := StrToFloat(EditErrorSecante.Text);
-     Funcion2.PtoXO := StrToFloat(EditPtoX0Secante.Text);
      { Calculamos la Raiz de la Funcion creada con sus datos }
      { GraficadorSecante contiene la Formula de la Función Ingresada }
      Funcion2.secante(GraficadorSecante);
      { Mostramos los datos en el panel de Resultados}
-     LabelIntervaloSecante.Caption:='Intervalo = ( '+FloatToStrF( Funcion2.Infimo, ffNumber, 2, 2 )+','+FloatToStrF( Funcion2.Supremo, ffNumber, 2, 2 )+')';
-     LabelShowPtoX0Secante.Caption:='Punto x0 = '+FloatToStr(Funcion2.PtoXO);
-     LabelRaizAproxSecante.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion2.RaizAproxmida, ffNumber, 4, 7 );
+     LabelIntervaloSecante.Caption:='Intervalo = ( '+FloatToStrF( Funcion2.Infimo, ffNumber, 2, 2 )+';'+FloatToStrF( Funcion2.Supremo, ffNumber, 2, 2 )+' )';
+     LabelRaizAproxSecante.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion2.RaizAproxmida, ffFixed, 4, 8 );
      LabelShowCantIterSecante.Caption:=IntToStr(Funcion2.NroInteraciones);
      { Mostramos el contenido Derivada }
      LabelShowDerivadaSecante.Caption:=GraficadorSecante.Derivada;
@@ -442,7 +438,16 @@ end;
 { ====================== BOTON "CANCELAR" ===========================}
 
 { ====================== BOTON "LIMPIAR" ===========================}
-
+procedure TFormMainFunciones.ButtonLimpiarSecanteClick(Sender: TObject);
+begin
+  EditInfSecante.Text:='';
+  EditSupSecante.Text:='';
+  EditErrorSecante.Text:='';
+  LabelIntervaloSecante.Caption:='Intervalo = ';
+  LabelRaizAproxSecante.Caption:='Raiz Aproximada = ';
+  LabelShowCantIterSecante.Caption:='';
+  LabelShowDerivadaSecante.Caption:='';
+end;
 { ====================== BOTON "LIMPIAR" ===========================}
 
 procedure TFormMainFunciones.EditFuncionSecanteKeyPress(Sender: TObject;var Key: Char);
@@ -467,8 +472,7 @@ begin
   PanelMuestraResultNewton.Visible:=true;
 end;
 {======================= BOTON "GRAFICAR" =======================}
-procedure TFormMainFunciones.ButtonGraficarFuncNewtonClick(
-  Sender: TObject);
+procedure TFormMainFunciones.ButtonGraficarFuncNewtonClick(Sender: TObject);
 begin
   { Asignamos la Funcion al Graficador}
   GraficadorNewton.formula:=EditFuncionNewton.Text;
@@ -602,7 +606,7 @@ begin
   { GraficadorSecante contiene la Formula de la Función Ingresada }
   Funcion4.regulaFalsiModificada(GraficadorRegFalsiMod);
   { Mostramos los datos en el panel de Resultados}
-  LabelShowIntervaloRegFalsiMod.Caption:='Intervalo = ( '+FloatToStrF( Funcion4.Infimo, ffNumber, 2, 2 )+','+FloatToStrF( Funcion4.Supremo, ffNumber, 2, 2 )+')';
+  LabelShowIntervaloRegFalsiMod.Caption:='Intervalo = ( '+FloatToStrF( Funcion4.Infimo, ffNumber, 2, 2 )+';'+FloatToStrF( Funcion4.Supremo, ffNumber, 2, 2 )+' )';
   LabelShowErrorRegFalsiMod.Caption:='Error = '+FloatToStr( Funcion4.ErrorRaiz);
   LabelRaizAproxRegFalsiMod.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion4.RaizAproxmida, ffNumber, 4, 7 );
   LabelShowCantIterRegFalsiMod.Caption:=IntToStr(Funcion4.NroInteraciones);
@@ -636,7 +640,7 @@ end;
 procedure TFormMainFunciones.EditFuncionRegFalsiModKeyPress(Sender: TObject; var Key: Char);
 begin
   if (Key = #13) then  {#13 "Enter"}
-    FormMainFunciones.ButtonGraficarRegFalsiClick(Sender);
+    FormMainFunciones.ButtonGraficarRegFalsiModClick(Sender);
 end;
 {************************************** Método Regula Falsi Modificado ************************************************************}
 
@@ -689,7 +693,7 @@ begin
   { GraficadorSecante contiene la Formula de la Función Ingresada }
   Funcion5.regulaFalsi(GraficadorRegFalsi);
   { Mostramos los datos en el panel de Resultados}
-  LabelShowIntervaloRegFalsi.Caption:='Intervalo = ( '+FloatToStrF( Funcion5.Infimo, ffNumber, 2, 1 )+','+FloatToStrF( Funcion5.Supremo, ffNumber, 2, 1 )+')';
+  LabelShowIntervaloRegFalsi.Caption:='Intervalo = ( '+FloatToStrF( Funcion5.Infimo, ffNumber, 2, 1 )+';'+FloatToStrF( Funcion5.Supremo, ffNumber, 2, 1 )+' )';
   LabelShowErrorRegFalsi.Caption:='Error = '+FloatToStr( Funcion5.ErrorRaiz);
   LabelRaizAproxRegFalsi.Caption:='Raiz Aproximada = '+FloatToStrF( Funcion5.RaizAproxmida, ffNumber, 4, 7 );
   LabelShowCantIterRegFalsi.Caption:=IntToStr(Funcion5.NroInteraciones);

@@ -134,7 +134,6 @@ begin
       ShowMessage('En Número de Iteraciones Máximo fue superado : '+IntToStr(NroIteracionesMax));
 end;
 
-
 procedure TCalRaiz.secante(F:TGraficador);
 var
    x_n,x_n1,x_n2:extended; {x_n es Xn y x_n1 es Xn+1 respectivamente}
